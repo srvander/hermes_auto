@@ -12,9 +12,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import UnexpectedAlertPresentException
 from selenium.common.exceptions import NoSuchElementException
+from chromedriver_autoupdate import get_chrome_version, update_chrome_driver
 
 #funciones selenium
-
 def get_web_element(web_element):
     """returns web element"""
     selected_element = driver.find_element(By.XPATH, web_element)
@@ -47,6 +47,16 @@ WEL_SEND_BUTTON = "//input[@id='btnRegistrar']"
 WEL_LOADING = "//img[@alt='Un momento por favor...']"
 WEL_LOADING_II = "//img[contains(@src, 'cargando')]"
 
+# verificar la version actual de chrome
+chrome_version = get_chrome_version()
+if chrome_version is None:
+    print("Google Chrome no está instalado.")
+    exit()
+print(f"Versión de Google Chrome: {chrome_version}")
+
+#actualizar chromedriver
+update_chrome_driver(chrome_version)
+
 
 #credenciales para ingresar. extraer de primeras dos lineas de config.txt
 #formato USUARIO=usuario, PASSWORD=password
@@ -55,6 +65,7 @@ with open('config.txt', 'r') as f:
     lines = f.readlines()
     usuario = lines[0].split('=')[1].strip()
     password = lines[1].split('=')[1].strip()
+    url = lines[2].split('=')[1].strip()
 
 # ruta de los pdfs a subir
 
@@ -62,7 +73,7 @@ pdfs_path = fr'{os.getcwd()}\pdfs'
 pdfs_list = os.listdir(pdfs_path)
 #pdfs_list= [pdf.replace(' 1','') for pdf in pdfs_list]
 pdfs_list = set(pdfs_list)
-print(len(pdfs_list))
+print('Total de pdfs para subir: ', len(pdfs_list))
 
 
 #activar selenium
@@ -75,7 +86,7 @@ s = Service('chromedriver.exe')
 
 driver = webdriver.Chrome(service=s, options=ChromeOptions)
 action = ActionChains(driver)
-driver.get("https://micgr.contraloria.cl/cgrapp/HERMES_WEB/cl/contraloria/hermes/inicio/InicioController.jpf?tHermes=RmWeb")
+driver.get(url)
 
 sleep(10)
 
