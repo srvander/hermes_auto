@@ -1,0 +1,3 @@
+USUARIO=XXXXXX
+PASSWORD=XXXXXXX
+URL=https://micgr.contraloria.cl/cgrapp/HERMES_WEB/cl/contraloria/hermes/inicio/InicioController.jpf?tHermes=RmWeb
